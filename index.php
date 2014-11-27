@@ -41,6 +41,9 @@
 			$('.edit_menu_block').toggle(500);
 		});
 
+		$('.show_users').click(function(){
+			$('.show_users_block').toggle(500);
+		});
 
 		$('#insert').click(function(){
 			console.log($(this).siblings('input.name').val());
@@ -103,7 +106,7 @@ font-size: 25px;
 		display: none;
 	}
 
-.menu_block,.add_element{
+.menu_block,.add_element,.show_users{
 	cursor: pointer;
 	background-color: rgba(255,255,255,0.5);
 
@@ -115,7 +118,7 @@ font-size: 25px;
 	display: none;
 }
 
-.edit_menu_block{
+.edit_menu_block,.show_users_block{
 	display: none;
 }
 input#insert{
@@ -155,9 +158,16 @@ margin-top: 5px;
    echo '<div class="add_element">';
    echo "<h1>add element to menu</h1>";
    echo '</div>';
+
+   echo '<div class="show_users">';
+   echo "<h1>show_users</h1>";
+   echo '</div>';   
    
 $query = "SELECT * FROM category";
 $result = mysql_query($query,$db);
+
+$query2 = "SELECT * FROM users";
+$result2 = mysql_query($query2,$db);
 
 echo mysql_num_rows($result);
 
@@ -189,7 +199,7 @@ if(mysql_num_rows($result) !=0){
 
 
 
-echo "<div class='add_element_block'>";
+					echo "<div class='add_element_block'>";
 					echo "name: <input class='name' type='text' >";
 					echo "<br>";
 					echo "parent:<input  class='parent' type='text'></br>";
@@ -198,9 +208,20 @@ echo "<div class='add_element_block'>";
 
 }
 
-
-
-
+						//show all users
+						echo "<div class='show_users_block'>";
+						for($i = 0; $i<mysql_num_rows($result2);$i++){
+ 			
+						$row2 = mysql_fetch_array($result2,MYSQL_ASSOC);
+							echo "<div id='opa'>";
+								echo "<span class='name'>id:  ".$row2['id']."</span><br>";
+								echo "<span class='id'>login:".$row2['login']."</span><br>";
+								echo "<span class='parent'>password:  ".$row2['password']."</span><br>";
+								echo "<span class='parent'>email:  ".$row2['email']."</span><br>";
+								echo "</div>";
+						}	
+						
+						echo "</div>";	
 
 
  ?>
