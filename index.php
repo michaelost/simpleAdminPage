@@ -4,6 +4,20 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="http://hayageek.github.io/jQuery-Upload-File/uploadfile.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://hayageek.github.io/jQuery-Upload-File/jquery.uploadfile.min.js"></script>
+
+	<script>
+		$(document).ready(function()
+						{
+							$("#fileuploader").uploadFile({
+								url:"YOUR_FILE_UPLOAD_URL",
+								fileName:"myfile"
+						});
+});
+</script>
+
 	<script>
 	$(document).ready(function(){
 	String.prototype.toInt=function(){
@@ -160,6 +174,7 @@ font-size: 25px;
 		font-size: 26px;
 		cursor: pointer;
 	}
+
 	body{
 		background-image: url("body_bg_new.jpg");
 	}
@@ -180,6 +195,12 @@ text-align: center;
 	font-size: 25px;
 	background-color: rgba(255,255,255,0.5);
 	display: none;
+}
+.dir{
+	font-size: 25px;
+	background-color: rgba(255,255,255,0.5);
+	display: block;
+
 }
 
 .edit_menu_block,.show_users_block{
@@ -317,6 +338,24 @@ if(mysql_num_rows($result) !=0){
 								echo "</div>";
 						}	
 						echo "</div>";	
+
+
+
+
+
+							echo "<div class='dir'>";
+							if ($handle = opendir('.')) {
+    						while (false !== ($entry = readdir($handle))) {
+        					if ($entry != "." && $entry != "..") {
+        					echo "<h3>";
+            				echo "$entry\n";
+            				echo "<input type='button' class='delete_file' value='delete' >";
+            				echo "</h3>";
+        						}
+   						 	}
+    						closedir($handle);
+							}
+							echo "</div>";
 
  ?>
 </body>
