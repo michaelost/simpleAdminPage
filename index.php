@@ -30,6 +30,10 @@
 			$('.edit_menu_block').toggle(500);
 		});
 
+		$('.show_topic').click(function(){
+			$('.show_topic_block').toggle(500);
+		});
+
 		$('.show_users').click(function(){
 			$('.show_users_block').toggle(500);
 		});
@@ -94,9 +98,41 @@
 				parent_id: $(".add_topic_block > .parent_id ").val(),
 				title: $(".add_topic_block > .title ").val(),
 				body: $(".add_topic_block > .body ").val()
-			},yea()); function yea(){ console.log("added");}
+			},yea()); 
+			function yea(){ 
+				$("#add_theme").attr('value','added');
+				$(".add_topic_block > input").val("");
+				$(".add_topic_block > textarea").val("");
+				
+					setTimeout($("#add_theme").attr('value','add theme'),1000);
+			}
 
 		});
+
+		$(".change_topic").click(function(){
+		
+		});
+
+		$(".change2").click(function(){
+			var topic_by = $(this).siblings('.topic_by').val(),
+				parent_id = $(this).siblings('.parent_id').val(),
+				title = $(this).siblings('.title').val(),
+				body = $(this).siblings('.body').val(),
+				topic_id = $(this).siblings('.topic_id').val();
+				$.post('change_topic.php',{
+					topic_by: topic_by,
+					parent_id: parent_id,
+					title: title,
+					body: body,
+					topic_id: topic_id
+				},yea());
+				function yea(){
+					console.log('changed');
+				}
+			
+			
+		});
+
 
 	});
 
@@ -133,21 +169,21 @@ font-size: 25px;
 	.fr{
 		display: none;
 	}
-.menu_block,.add_element,.show_users,.add_topic{
+.menu_block,.add_element,.show_users,.add_topic,.show_topic{
 	cursor: pointer;
 	background-color: rgba(255,255,255,0.5);
 }
 .add_topic_block{
 text-align: center;
 }
-.add_element_block,.add_topic_block{
+.add_element_block,.add_topic_block,.show_topic_block{
 	font-size: 25px;
 	background-color: rgba(255,255,255,0.5);
 	display: none;
 }
 
 .edit_menu_block,.show_users_block{
-	display: none;
+	display:none;
 }
 input#insert{
 	outline: none;
@@ -186,10 +222,16 @@ margin-top: 5px;
    echo '<div class="add_topic">';
    echo "<h1>add_topic</h1>";
    echo '</div>'; 
+   echo '<div class="show_topic">';
+   echo "<h1>show_topic</h1>";
+   echo '</div>'; 
 $query = "SELECT * FROM category";
 $result = mysql_query($query,$db);
 $query2 = "SELECT * FROM users";
 $result2 = mysql_query($query2,$db);
+$query3 = "SELECT * FROM topic";
+$result3 = mysql_query($query3,$db);
+
 echo mysql_num_rows($result);
 if(mysql_num_rows($result) !=0){
 	echo '<div class="edit_menu_block">';
@@ -242,6 +284,40 @@ if(mysql_num_rows($result) !=0){
 					echo "text:<br><textarea class='body' rows='10' cols='150' class='title'></textarea></br>";					 
 					echo "<input  type='button' id='add_theme' value='add theme' name='add_theme'>";
 					echo "</div>";
+
+
+					//all topic
+
+					echo "<div class='show_topic_block'>";
+						for($i = 0; $i<mysql_num_rows($result3);$i++){
+ 			
+						$row3 = mysql_fetch_array($result3,MYSQL_ASSOC);
+							echo "<div id='opa'>";
+								echo "<span class='topic_id'>topic_id:  ".$row3['topic_id']."</span><br>";
+								echo "<span class='parent_id'>paremt_id:".$row3['parent_id']."</span><br>";
+								echo "<span class='topic_by'>topic_by:  ".$row3['topic_by']."</span><br>";
+								echo "<span class='title'>title:  ".$row3['title']."</span><br>";
+								echo "<span class='body'>isbanned:  ".$row3['body']."</span><br>";
+								
+									
+
+								echo "<div class='fr2'>";
+								echo "id:   <input class='topic_id' type='text' value=".$row3['topic_id']."></br>";
+								echo "<br>";
+								echo "parent:<input  class='parent_id' type='text' value=".$row3['parent_id']."></br>";
+								echo "topic_by:<input  class='topic_by' type='text' value=".$row3['topic_by']."></br>";
+								echo "title:<input  class='title' type='text' value=".$row3['title']."></br>";
+								echo "body:<textarea  class='body'>".$row3['title']."</textarea></br>";
+								
+								echo "<input  type='button' class='change2' value='change2' name='change2'>";
+								echo "</div>";
+
+
+
+								echo "</div>";
+						}	
+						echo "</div>";	
+
  ?>
 </body>
 </html>
