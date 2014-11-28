@@ -5,25 +5,17 @@
 	<title>Document</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>
-
-
 	$(document).ready(function(){
 	String.prototype.toInt=function(){
     return parseInt(this.replace(/\D/g, ''),10);
 }
-
-			$(".edit").click(function(){
-				
+			$(".edit").click(function(){				
 				if($(this).siblings('div').css('display')=='none')
 					$(this).siblings('div').css('display','block');
 				else $(this).siblings('div').css('display','none');
-
-
-
 			});
 
-			$("input#change").click(function(){
-				
+			$("input#change").click(function(){				
 				var name = $(this).siblings('input.name').val(),
 				parent = $(this).siblings('input.parent').val(),
 				id = $(this).parent().siblings(".id").text().toInt();
@@ -31,11 +23,8 @@
 					name: name,
 					parent_id: parent,
 					id: id
-				}
-				
+				}				
 				);
-
-
 			});
 		$('.menu_block').click(function(){
 			$('.edit_menu_block').toggle(500);
@@ -43,6 +32,10 @@
 
 		$('.show_users').click(function(){
 			$('.show_users_block').toggle(500);
+		});
+
+		$('.add_topic').click(function(){
+			$('.add_topic_block').toggle(500);
 		});
 
 		$('#insert').click(function(){
@@ -55,20 +48,16 @@
 			},
 			yea()
 			);
-
 			function yea () {
 					$("#insert").attr('value','added');
 					setTimeout($("#insert").attr('value','insert'),1000);
 					
-
 			}
 		});
 
 		$('.add_element').click(function(){
 			$('.add_element_block').toggle(500);
 		});
-
-
 		$('input.bun').click(function(){
 			var _id = $(this).siblings('.id').text().toInt();
 			$.post("ban.php",{
@@ -80,7 +69,6 @@
 		function yea(){
 			console.log("banned");
 		}
-
 		});
 		$('input.unbun').click(function(){
 				var _id = $(this).siblings('.id').text().toInt();
@@ -94,9 +82,21 @@
 		function yea(){
 			console.log("unbanned");
 		}
-
 			});
 		
+		$("#add_theme").click(function(){
+			console.log($(".add_topic_block > .topic_by ").val());
+			console.log($(".add_topic_block > .parent_id ").val());
+			console.log($(".add_topic_block > .title ").val());
+			console.log($(".add_topic_block > .body ").val());
+			$.post('add_topic.php',{
+				topic_by: $(".add_topic_block > .topic_by ").val(),
+				parent_id: $(".add_topic_block > .parent_id ").val(),
+				title: $(".add_topic_block > .title ").val(),
+				body: $(".add_topic_block > .body ").val()
+			},yea()); function yea(){ console.log("added");}
+
+		});
 
 	});
 
@@ -124,25 +124,23 @@ font-size: 25px;
 		font-size: 26px;
 		cursor: pointer;
 	}
-
 	body{
 		background-image: url("body_bg_new.jpg");
 	}
 	input{
 		font-size: 20px;
 	}
-
 	.fr{
 		display: none;
 	}
-
-.menu_block,.add_element,.show_users{
+.menu_block,.add_element,.show_users,.add_topic{
 	cursor: pointer;
 	background-color: rgba(255,255,255,0.5);
-
 }
-
-.add_element_block{
+.add_topic_block{
+text-align: center;
+}
+.add_element_block,.add_topic_block{
 	font-size: 25px;
 	background-color: rgba(255,255,255,0.5);
 	display: none;
@@ -170,42 +168,32 @@ input[type='text']{
 border-radius: 10px;
 margin-top: 5px;
 }
-
 </style>
-
 </head>
-<body>
-	
+<body>	
 <?php
-
-
  $db = mysql_connect ("localhost","root","123qweasdzxcv");
  mysql_select_db("laba",$db);
-
  	echo '<div class="menu_block">';
    echo "<h1>edit menu</h1>";
    echo '</div>';
    echo '<div class="add_element">';
    echo "<h1>add element to menu</h1>";
    echo '</div>';
-
    echo '<div class="show_users">';
    echo "<h1>show_users</h1>";
    echo '</div>';   
-   
+   echo '<div class="add_topic">';
+   echo "<h1>add_topic</h1>";
+   echo '</div>'; 
 $query = "SELECT * FROM category";
 $result = mysql_query($query,$db);
-
 $query2 = "SELECT * FROM users";
 $result2 = mysql_query($query2,$db);
-
 echo mysql_num_rows($result);
-
 if(mysql_num_rows($result) !=0){
-
 	echo '<div class="edit_menu_block">';
-	for($i = 0; $i<mysql_num_rows($result);$i++){
- 			
+	for($i = 0; $i<mysql_num_rows($result);$i++){		
 		$row = mysql_fetch_array($result,MYSQL_ASSOC);
 			echo "<div id='opa'>";
 			echo "<span class='name'>name:  ".$row['name']."</span><br>";
@@ -219,16 +207,9 @@ if(mysql_num_rows($result) !=0){
 					echo "parent:<input  class='parent' type='text' value=".$row['parent'].">";
 					echo "<input  type='button' id='change' value='change' name='change'>";
 				echo "</div>";
-			echo "</div>";
-			
-			
-	
-			
+			echo "</div>";			
 	}
  echo '</div>';
-
-
-
 					echo "<div class='add_element_block'>";
 					echo "name: <input class='name' type='text' >";
 					echo "<br>";
@@ -237,7 +218,6 @@ if(mysql_num_rows($result) !=0){
 					echo "</div>";
 
 }
-
 						//show all users
 						echo "<div class='show_users_block'>";
 						for($i = 0; $i<mysql_num_rows($result2);$i++){
@@ -250,16 +230,18 @@ if(mysql_num_rows($result) !=0){
 								echo "<span class='email'>email:  ".$row2['email']."</span><br>";
 								echo "<span class='isbanned'>isbanned:  ".$row2['isbanned']."</span><br>";
 								echo "<input type='button' class='bun' value='ban' />";
-								echo "<input type='button' class='unbun' value='unban'/>";
-								
-								
+								echo "<input type='button' class='unbun' value='unban'/>";	
 								echo "</div>";
 						}	
-						
 						echo "</div>";	
-
-
+						//add_topic
+					echo "<div class='add_topic_block'>";
+					echo "topic_author_id: <input class='topic_by' type='text' >";					
+					echo "parent_id: <input class='parent_id' type='text' >";					
+					echo "title:<input  class='title' type='text'></br>";
+					echo "text:<br><textarea class='body' rows='10' cols='150' class='title'></textarea></br>";					 
+					echo "<input  type='button' id='add_theme' value='add theme' name='add_theme'>";
+					echo "</div>";
  ?>
-
 </body>
 </html>
