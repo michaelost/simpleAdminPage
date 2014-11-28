@@ -68,6 +68,36 @@
 			$('.add_element_block').toggle(500);
 		});
 
+
+		$('input.bun').click(function(){
+			var _id = $(this).siblings('.id').text().toInt();
+			$.post("ban.php",{
+				id: _id,
+				ban: 1
+			},
+				yea()
+			);
+		function yea(){
+			console.log("banned");
+		}
+
+		});
+		$('input.unbun').click(function(){
+				var _id = $(this).siblings('.id').text().toInt();
+			
+			$.post("ban.php",{
+				id: _id,
+				ban: 0
+			},
+				yea()
+			);
+		function yea(){
+			console.log("unbanned");
+		}
+
+			});
+		
+
 	});
 
 	</script>
@@ -214,10 +244,15 @@ if(mysql_num_rows($result) !=0){
  			
 						$row2 = mysql_fetch_array($result2,MYSQL_ASSOC);
 							echo "<div id='opa'>";
-								echo "<span class='name'>id:  ".$row2['id']."</span><br>";
-								echo "<span class='id'>login:".$row2['login']."</span><br>";
-								echo "<span class='parent'>password:  ".$row2['password']."</span><br>";
-								echo "<span class='parent'>email:  ".$row2['email']."</span><br>";
+								echo "<span class='id'>id:  ".$row2['id']."</span><br>";
+								echo "<span class='login'>login:".$row2['login']."</span><br>";
+								echo "<span class='password'>password:  ".$row2['password']."</span><br>";
+								echo "<span class='email'>email:  ".$row2['email']."</span><br>";
+								echo "<span class='isbanned'>isbanned:  ".$row2['isbanned']."</span><br>";
+								echo "<input type='button' class='bun' value='ban' />";
+								echo "<input type='button' class='unbun' value='unban'/>";
+								
+								
 								echo "</div>";
 						}	
 						
